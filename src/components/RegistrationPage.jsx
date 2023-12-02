@@ -70,7 +70,7 @@ export const RegistrationPage = () => {
         <div className="page">
             <div className="page__container">
                 <div className="auth-block">
-                    <div className="title">Create new account <div className="primary">.</div></div>
+                    <div className="title">Create new account<div className="primary">.</div></div>
                     <div className="text">Already A Member? <NavLink className="link" to="/login">Log In</NavLink></div>
                     <form action="" className="fields-block" onSubmit={event => submitHandler(event)}>
                         <div className="name-fields">
