@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useLogInUserMutation } from "../redux/userApi";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/userSlice";
@@ -31,6 +31,7 @@ export const LoginPage = () => {
     const closeEyeIcon = require("../img/close-eye-icon.png");
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [logInUser, {data, isSuccess}] = useLogInUserMutation();
 
@@ -42,7 +43,7 @@ export const LoginPage = () => {
     if (isSuccess) {
         localStorage.setItem("token", data.token);
         dispatch(login(data.user));
-        console.log("Success!");
+        navigate("/");
     }
 
     const submitHandler = async (event) => {
