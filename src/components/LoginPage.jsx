@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useLogInUserMutation } from "../redux/userApi";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/userSlice";
 
 export const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -27,21 +30,41 @@ export const LoginPage = () => {
     const openEyeIcon = require("../img/open-eye-icon.png");
     const closeEyeIcon = require("../img/close-eye-icon.png");
 
+    const dispatch = useDispatch();
+
+    const [logInUser, {data, isSuccess}] = useLogInUserMutation();
+
     function isValidEmail(data) {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3}$/;
         return emailRegex.test(data);
     }
-    const submitHandler = (event) => {
+
+    if (isSuccess) {
+        localStorage.setItem("token", data.token);
+        dispatch(login(data.user));
+        console.log("Success!");
+    }
+
+    const submitHandler = async (event) => {
         event.preventDefault();
 
         setPasswordHidden(true);
 
+        let errorCounter = 0;
         if (!isValidEmail(email)) {
             setEmailError(true);
+            errorCounter++;
         }
         if (password.trim().length < 7) {
             setPasswordError(true);
+            errorCounter++;
         }
+
+        if (errorCounter > 0) {
+            return 0;
+        }
+
+        await logInUser({email, password});
     }
     return (
         <div className="page">
