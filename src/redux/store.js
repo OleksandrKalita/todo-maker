@@ -1,4 +1,4 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { usersApi } from "./userApi";
 import userSlice from "./userSlice";
 
@@ -7,5 +7,5 @@ export const store = configureStore({
         [usersApi.reducerPath]: usersApi.reducer,
         user: userSlice,
     },
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(usersApi.middleware);
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(usersApi.middleware),
 });

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useSignInUserMutation } from "../redux/userApi";
 
 export const RegistrationPage = () => {
     const [firstName, setFirstName] = useState("");
@@ -44,27 +45,45 @@ export const RegistrationPage = () => {
     const openEyeIcon = require("../img/open-eye-icon.png");
     const closeEyeIcon = require("../img/close-eye-icon.png");
 
+    const [signInUser, {isError, isSuccess}] = useSignInUserMutation();
+
+    const navigate = useNavigate();
+
     function isValidEmail(data) {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3}$/;
         return emailRegex.test(data);
     }
-    const submitHandler = (event) => {
+
+    if (isSuccess) {
+        navigate("/login");
+    }
+    const submitHandler = async (event) => {
         event.preventDefault();
 
         setPasswordHidden(true);
 
+        let errorCounter = 0;
         if (firstName.trim().length === 0) {
             setFirstNameError(true);
+            errorCounter++;
         }
         if (lastName.trim().length === 0) {
             setLastNameError(true);
+            errorCounter++;
         }
         if (!isValidEmail(email)) {
             setEmailError(true);
+            errorCounter++;
         }
         if (password.trim().length < 7) {
             setPasswordError(true);
+            errorCounter++;
         }
+        
+        if (errorCounter > 0) {
+            return 0;
+        }
+        await signInUser({firstName, lastName, email, password});
     }
     return (
         <div className="page">
