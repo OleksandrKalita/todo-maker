@@ -1,13 +1,10 @@
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { HeaderComponent } from "./MainComponents/HeaderComponent";
 
 export const MainLayout = () => {
     return (
         <div className="wrapper">
-            <header className="header">
-                <div className="header__container">
-
-                </div>
-            </header>
+            <HeaderComponent/>
             <Outlet/>
         </div>
     );

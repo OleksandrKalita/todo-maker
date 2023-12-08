@@ -1,5 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
 
+.con {
+    min-height: 100%;
+}
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color:  #151921; 
+}
+
+.component {
+    flex: 1 1 auto;
+}
+
 .page {
     width: 100vw;
     height: 100vh;

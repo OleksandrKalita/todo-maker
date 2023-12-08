@@ -21,7 +21,14 @@ export const usersApi = createApi({
                 body,
             })
         }),
+        auth: build.mutation({
+            query: () => ({
+                url: "api/auth/auth",
+                method: "POST",
+                headers: {Authorization: `Bearer ${localStorage.getItem("token")}`},
+            })
+        })
     }) ,
 })
 
-export const { useGetUsersQuery, useSignInUserMutation, useLogInUserMutation } = usersApi;
+export const { useGetUsersQuery, useSignInUserMutation, useLogInUserMutation, useAuthMutation } = usersApi;

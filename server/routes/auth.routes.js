@@ -4,6 +4,7 @@ const User = require("../models/User.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const authMiddleware = require("../middleware/auth.middleware.js");
 
 router.post("/registration", async (req, res) => {
     try {
@@ -30,7 +31,8 @@ router.post("/registration", async (req, res) => {
     }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login",
+    async (req, res) => {
     try {
         const data = req.body;
 
@@ -57,5 +59,23 @@ router.post("/login", async (req, res) => {
         return res.status(400).json({message: "Server error: " + e});
     }
 })
+router.post("/auth", authMiddleware,
+    async (req, res) => {
+    try {
+        const user = await User.findOne({_id: req.user.id});
 
+        const token = jwt.sign({id: user.id}, config.get("secretKey"), {expiresIn: "1h"});
+
+        return res.json({
+            token,
+            user: {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+            }
+        });
+    } catch (e) {
+        return res.json({message: "Server error: " + e})
+    }
+})
 module.exports = router;

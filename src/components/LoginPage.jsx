@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../redux/userSlice";
 
 export const LoginPage = () => {
-    const [email, setEmail] = useState("");
+    const [email, setEmail] = useState("@gmail.com");
     const [password, setPassword] = useState("");
 
     const [emailFocus, setEmailFocus] = useState(false);
@@ -43,7 +43,7 @@ export const LoginPage = () => {
     if (isSuccess) {
         localStorage.setItem("token", data.token);
         dispatch(login(data.user));
-        navigate("/");
+        navigate("/main");
     }
 
     const submitHandler = async (event) => {
