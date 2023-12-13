@@ -27,8 +27,16 @@ export const usersApi = createApi({
                 method: "POST",
                 headers: {Authorization: `Bearer ${localStorage.getItem("token")}`},
             })
+        }),
+        imageUpdate: build.mutation({
+            query: (formData) => ({
+                url: "api/auth/image-update",
+                method: "POST",
+                headers: {Authorization: `Bearer ${localStorage.getItem("token")}`},
+                body: formData,
+            })
         })
     }) ,
 })
 
-export const { useGetUsersQuery, useSignInUserMutation, useLogInUserMutation, useAuthMutation } = usersApi;
+export const { useGetUsersQuery, useSignInUserMutation, useLogInUserMutation, useAuthMutation, useImageUpdateMutation } = usersApi;

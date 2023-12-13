@@ -5,6 +5,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const authMiddleware = require("../middleware/auth.middleware.js");
+const multer = require("multer");
+const path = require("path");
 
 router.post("/registration", async (req, res) => {
     try {
@@ -21,6 +23,7 @@ router.post("/registration", async (req, res) => {
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
+            photo: "",
             password: hashedPassword,
         });
 
@@ -42,7 +45,7 @@ router.post("/login",
         } 
 
         const isPasswordValid = bcrypt.compareSync(data.password, user.password);
-        if (isPasswordValid) {
+        if (!isPasswordValid) {
             return res.status(404).json({message: "Password is unvalid!"});
         }
 
@@ -52,6 +55,7 @@ router.post("/login",
             user: {
                 firstName: user.firstName,
                 lastName: user.lastName,
+                logoPath: user.photo,
                 email: user.email,
             }
         })
@@ -71,6 +75,7 @@ router.post("/auth", authMiddleware,
             user: {
                 firstName: user.firstName,
                 lastName: user.lastName,
+                logoPath: user.photo,
                 email: user.email,
             }
         });
@@ -78,4 +83,38 @@ router.post("/auth", authMiddleware,
         return res.json({message: "Server error: " + e})
     }
 })
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "public/Images");
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+})
+router.post("/image-update", upload.single("file"), authMiddleware,
+    async (req, res) => {
+        try {
+            console.log(req.file);
+
+            const user = await User.findOneAndUpdate({_id: req.user.id}, {photo: req.file.filename}, {
+                new: false,
+                upsert: true,
+                rawResult: true // Return the raw result from the MongoDB driver
+            });
+
+            const token = jwt.sign({id: user.id}, config.get("secretKey"), {expiresIn: "1h"});
+
+            return res.json({
+                token,
+                logoPath: user.photo,
+            });
+        } catch (e) {
+            return res.json({message: "Server error: " + e})
+        }
+    })
 module.exports = router;

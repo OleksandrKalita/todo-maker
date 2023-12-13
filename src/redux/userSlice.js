@@ -15,9 +15,12 @@ const userSlice = createSlice({
         logout (state) {
             state.isAuth = false;
             state.user = {};
-        }
+        },
+        updateLogo (state, action) {
+            state.user.logoPath = action.payload;
+        },
     }
 })
 
 export default userSlice.reducer;
-export const { login, logout } = userSlice.actions;
+export const { login, logout, updateLogo } = userSlice.actions;

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useAuthMutation } from "./redux/userApi";
 import { login } from "./redux/userSlice";
+import { SettingsComponent } from "./components/MainComponents/SettingsComponent";
 
 function App() {
   const isAuth = useSelector(state => state.user.isAuth);
@@ -31,6 +32,7 @@ function App() {
           {/* <Route path="main/*" element={isAuth ? <MainLayout/> : <Navigate to="/login"/>}> */}
           <Route path="main/*" element={<MainLayout/>}>
             <Route path="" element={<MainComponent/>}/>
+            <Route path="settings" element={isAuth ? <SettingsComponent/> : <Navigate to={"/main"}/>}/>
           </Route>
           <Route path="login" element={isAuth ? <Navigate to="/main"/> : <LoginPage/>}/>
           <Route path="signin" element={isAuth ? <Navigate to="/main"/> : <RegistrationPage/>}/>

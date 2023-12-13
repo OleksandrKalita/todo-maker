@@ -23,7 +23,7 @@ export const HeaderComponent = () => {
                 </nav>
                 <div className="header__auth">
                     {
-                        isAuth ? <NavLink to={"/settings"}><img className="auth-img" src={userDefaultIcon} alt="" /></NavLink>
+                        isAuth ? <NavLink to={"/main/settings"}><img className="auth-img" src={userDefaultIcon} alt="" /></NavLink>
                         : <NavLink to={"/login"}><button className="auth-button">Log in</button></NavLink>
                     }
                 </div>

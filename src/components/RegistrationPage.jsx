@@ -146,7 +146,7 @@ export const RegistrationPage = () => {
                             onBlur={() => setPasswordFocus(false)}
                             onChange={event => {
                                 if (passwordError) setPasswordError(false); 
-                                setPassword(event.target.value)
+                                setPassword(event.target.value);
                             }}/>
                             <img 
                             src={passwordHidden ? openEyeIcon : closeEyeIcon} 

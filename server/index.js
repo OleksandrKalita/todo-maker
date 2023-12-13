@@ -9,6 +9,7 @@ const PORT = config.get("serverPort");
 app.use(corsMiddleware);
 app.use(express.json());
 app.use("/api/auth", authRouter);
+app.use(express.static("public"));
 
 const start = async () => {
     try {
