@@ -19,6 +19,10 @@ function App() {
     auth();
   }, []);
 
+  // if (isError) {
+  //   localStorage.removeItem("token");
+  // }
+
   if (isSuccess) {
     localStorage.setItem("token", data.token);
     dispatch(login(data.user));

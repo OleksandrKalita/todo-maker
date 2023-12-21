@@ -80,7 +80,7 @@ router.post("/auth", authMiddleware,
             }
         });
     } catch (e) {
-        return res.json({message: "Server error: " + e})
+        return res.status(401).json({message: "Server error: " + e})
     }
 })
 
@@ -102,7 +102,7 @@ router.post("/image-update", upload.single("file"), authMiddleware,
             console.log(req.file);
 
             const user = await User.findOneAndUpdate({_id: req.user.id}, {photo: req.file.filename}, {
-                new: false,
+                new: true,
                 upsert: true,
                 rawResult: true // Return the raw result from the MongoDB driver
             });

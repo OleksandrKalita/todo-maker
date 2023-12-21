@@ -6,7 +6,8 @@ import { updateLogo } from "../../redux/userSlice";
 export const SettingsComponent = () => {
     const dispatch = useDispatch();
     const user = useSelector(store => store.user.user);
-    const logoPath = user.logoPath;
+    // const [logoPath, setLogoPath] = useState(user.logoPath);
+    const logoPath = useSelector(store => store.user.user.logoPath);
 
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
@@ -37,22 +38,28 @@ export const SettingsComponent = () => {
 
     const passportIcon = require("../../img/passport-icon.png");
     const emailIcon = require("../../img/email-icon.png");
-    const userDefaultIcon = require("../../img/test-photo.jpg");
-    const userLogo = require(`../../../public/Images/${logoPath}`);
+    const userDefaultIcon = require("../../img/user-default-icon.png");
+    let userLogo = "";
+    try {
+        userLogo = require(`../../../public/Images/${logoPath}`);
+    } catch (e)  {
+        userLogo = userDefaultIcon;
+    }
 
-    const [file, setFile] = useState(null);
+    const [file, setFile] = useState(userLogo ? userLogo : userDefaultIcon);
 
     const [imageUpdate, { data, isSuccess }] = useImageUpdateMutation();
     
     if (isSuccess) {
         localStorage.setItem("token", data.token);
         console.log(data.logoPath);
+        // setLogoPath(data.logoPath);
         dispatch(updateLogo(data.logoPath));
     }
     const handleUpload = (e) => {
-        console.log(file);
         const formData = new FormData();
         formData.append("file", file);
+
         imageUpdate(formData);
     }
     const submitHandler = (event) => {
